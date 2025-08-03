@@ -3,6 +3,5 @@
     public interface IExchangeRateService
     {
         decimal GetExchangeRate(string fromCurrency, string toCurrency);
-        decimal CalculateConvertedAmount(string fromCurrency, string toCurrency, decimal amount);
     }
 }

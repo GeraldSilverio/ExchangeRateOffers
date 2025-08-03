@@ -19,38 +19,26 @@
                 }
             }
 
-            _logger.LogInformation("Loaded {Count} exchange rates for API3", _exchangeRates.Count);
+            _logger.LogInformation("Cargadas {Count} tasas de cambio para API3", _exchangeRates.Count);
         }
 
         public decimal GetConvertedTotal(string sourceCurrency, string targetCurrency, decimal quantity)
         {
             var key = $"{sourceCurrency}_{targetCurrency}";
-
             decimal rate;
+
             if (_exchangeRates.TryGetValue(key, out rate))
             {
-                _logger.LogDebug("Found rate for {Key}: {Rate}", key, rate);
+                _logger.LogDebug("Tasa encontrada para {Key}: {Rate}", key, rate);
             }
             else
             {
-                // Try reverse rate
-                var reverseKey = $"{targetCurrency}_{sourceCurrency}";
-                if (_exchangeRates.TryGetValue(reverseKey, out var reverseRate))
-                {
-                    rate = 1 / reverseRate;
-                    _logger.LogDebug("Calculated reverse rate for {Key}: {Rate}", key, rate);
-                }
-                else
-                {
-                    _logger.LogWarning("Exchange rate not found for {Key}", key);
-                    throw new ArgumentException($"Exchange rate not available for {sourceCurrency} to {targetCurrency}");
-                }
+                _logger.LogWarning("Tasa de cambio no encontrada para {Key}", key);
+                throw new ArgumentException($"Tasa de cambio no disponible para {sourceCurrency} a {targetCurrency}");
             }
 
-            // API3 returns the converted total amount
             var total = quantity * rate;
-
-            _logger.LogDebug("Converted {Quantity} {Source} to {Total} {Target} at rate {Rate}",
+            _logger.LogDebug("Convertido {Quantity} {Source} a {Total} {Target} con tasa {Rate}",
                 quantity, sourceCurrency, total, targetCurrency, rate);
 
             return Math.Round(total, 2);
