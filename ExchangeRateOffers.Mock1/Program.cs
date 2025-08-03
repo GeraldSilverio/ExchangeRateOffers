@@ -1,15 +1,46 @@
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
+using ExchangeRateOffers.Mock1.Middleware;
+using ExchangeRateOffers.Mock1.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
+// Add services to the container
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Add logging
+builder.Services.AddLogging(config =>
+{
+    config.AddConsole();
+    config.AddDebug();
+});
+
+// Register services
+builder.Services.AddScoped<IExchangeRateService, ExchangeRateService>();
+
+// Initialize Firebase
+var firebaseConfigPath = builder.Configuration["Firebase:ServiceAccountKeyPath"];
+if (!string.IsNullOrEmpty(firebaseConfigPath) && File.Exists(firebaseConfigPath))
+{
+    FirebaseApp.Create(new AppOptions()
+    {
+        Credential = GoogleCredential.FromFile(firebaseConfigPath)
+    });
+}
+else
+{
+    // For development, you might want to use default credentials
+    FirebaseApp.Create(new AppOptions()
+    {
+        Credential = GoogleCredential.GetApplicationDefault()
+    });
+}
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -18,7 +49,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+// Add Firebase Authentication Middleware
+app.UseMiddleware<FirebaseAuthMiddleware>();
 
 app.MapControllers();
 

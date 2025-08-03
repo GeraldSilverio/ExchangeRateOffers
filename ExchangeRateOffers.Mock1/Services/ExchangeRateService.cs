@@ -32,14 +32,6 @@
             {
                 return rate;
             }
-
-            var reverseKey = $"{toCurrency}_{fromCurrency}";
-            if (_exchangeRates.TryGetValue(reverseKey, out var reverseRate))
-            {
-                var calculatedRate = 1 / reverseRate;
-                return calculatedRate;
-            }
-
             throw new ArgumentException($"Exchange rate not available for {fromCurrency} to {toCurrency}");
         }
 
