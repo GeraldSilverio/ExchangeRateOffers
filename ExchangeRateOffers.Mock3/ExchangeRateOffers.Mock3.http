@@ -1,4 +1,4 @@
-@ExchangeRateOffers.Mock3_HostAddress = http://localhost:5011
+@ExchangeRateOffers.Mock3_HostAddress = http://localhost:5261
 
 GET {{ExchangeRateOffers.Mock3_HostAddress}}/weatherforecast/
 Accept: application/json
