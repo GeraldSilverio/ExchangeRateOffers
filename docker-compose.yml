@@ -23,3 +23,15 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:8080
       - ASPNETCORE_HTTP_PORTS=8080
+
+  exchangerate-mock3:
+    build:
+      context: .
+      dockerfile: ExchangeRateOffers.Mock3/Dockerfile
+    container_name: exchangerate-mock3
+    ports:
+      - "5003:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - ASPNETCORE_HTTP_PORTS=8080
