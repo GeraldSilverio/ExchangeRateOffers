@@ -7,7 +7,7 @@ using ExchangeRateOffers.Mock2.Dtos;
 namespace ExchangeRateOffers.Mock2.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/mock2")]
     public class ExchangeController : ControllerBase
     {
         private readonly IExchangeRateService _exchangeRateService;
@@ -27,17 +27,16 @@ namespace ExchangeRateOffers.Mock2.Controllers
         {
             try
             {
-                // Get user from context (set by middleware)
                 var userId = HttpContext.Items["UserId"]?.ToString();
-                _logger.LogInformation("Processing XML exchange rate request for user: {UserId}", userId);
+                _logger.LogInformation("Procesando solicitud de tasa de cambio XML para el usuario: {UserId}", userId);
 
-                // Read the XML request body
+                // Leer el cuerpo de la solicitud XML
                 using var reader = new StreamReader(Request.Body);
                 var xmlContent = await reader.ReadToEndAsync();
 
-                _logger.LogDebug("Received XML: {XmlContent}", xmlContent);
+                _logger.LogDebug("XML recibido: {XmlContent}", xmlContent);
 
-                // Deserialize XML request
+                // Deserializar solicitud XML
                 var request = DeserializeXml<ExchangeRequest>(xmlContent);
 
                 if (request == null)
@@ -45,11 +44,11 @@ namespace ExchangeRateOffers.Mock2.Controllers
                     return BadRequest(SerializeToXml(new ErrorResult
                     {
                         Code = 400,
-                        Message = "Invalid XML request format"
+                        Message = "Formato de solicitud XML inválido"
                     }));
                 }
 
-                // Validate request
+                // Validar solicitud
                 if (string.IsNullOrWhiteSpace(request.From) ||
                     string.IsNullOrWhiteSpace(request.To) ||
                     request.Amount <= 0)
@@ -57,11 +56,11 @@ namespace ExchangeRateOffers.Mock2.Controllers
                     return BadRequest(SerializeToXml(new ErrorResult
                     {
                         Code = 400,
-                        Message = "Invalid request. From, To currencies and Amount > 0 are required"
+                        Message = "Solicitud inválida. Se requieren las monedas From, To y Amount > 0"
                     }));
                 }
 
-                // Get converted amount
+                // Obtener cantidad convertida
                 var convertedAmount = _exchangeRateService.GetConvertedAmount(
                     request.From.ToUpper(),
                     request.To.ToUpper(),
@@ -72,7 +71,7 @@ namespace ExchangeRateOffers.Mock2.Controllers
                     Result = convertedAmount
                 };
 
-                _logger.LogInformation("Successfully converted {Amount} {From} to {ConvertedAmount} {To}",
+                _logger.LogInformation("Conversión exitosa: {Amount} {From} a {ConvertedAmount} {To}",
                     request.Amount, request.From, convertedAmount, request.To);
 
                 var xmlResponse = SerializeToXml(result);
@@ -80,7 +79,7 @@ namespace ExchangeRateOffers.Mock2.Controllers
             }
             catch (ArgumentException ex)
             {
-                _logger.LogWarning("Invalid currency pair: {Message}", ex.Message);
+                _logger.LogWarning("Par de monedas inválido: {Message}", ex.Message);
                 var errorResult = new ErrorResult
                 {
                     Code = 404,
@@ -90,15 +89,16 @@ namespace ExchangeRateOffers.Mock2.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Unexpected error processing XML exchange request");
+                _logger.LogError(ex, "Error inesperado procesando la solicitud de intercambio XML");
                 var errorResult = new ErrorResult
                 {
                     Code = 500,
-                    Message = "An unexpected error occurred"
+                    Message = "Ocurrió un error inesperado"
                 };
                 return StatusCode(500, SerializeToXml(errorResult));
             }
         }
+
         private T DeserializeXml<T>(string xml) where T : class
         {
             try
@@ -109,7 +109,7 @@ namespace ExchangeRateOffers.Mock2.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error deserializing XML: {Xml}", xml);
+                _logger.LogError(ex, "Error deserializando XML: {Xml}", xml);
                 return null;
             }
         }
@@ -125,8 +125,8 @@ namespace ExchangeRateOffers.Mock2.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error serializing object to XML");
-                return "<Error><Code>500</Code><Message>Serialization error</Message></Error>";
+                _logger.LogError(ex, "Error serializando objeto a XML");
+                return "<Error><Code>500</Code><Message>Error de serialización</Message></Error>";
             }
         }
     }

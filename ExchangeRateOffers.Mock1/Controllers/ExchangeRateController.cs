@@ -18,19 +18,18 @@ namespace ExchangeRateOffers.Mock1.Controllers
             _logger = logger;
         }
 
-        [HttpPost("convert-currency")]
+        [HttpPost("get-rate")]
         public ActionResult<ResponseDto> ConvertCurrency([FromBody] RequestDto request)
         {
             try
             {
-                // Get user from context (set by middleware)
                 var userId = HttpContext.Items["UserId"]?.ToString();
-                _logger.LogInformation("Processing exchange rate request for user: {UserId}", userId);
+                _logger.LogInformation("Procesando solicitud de tasa de cambio para el usuario: {UserId}", userId);
 
-                // Validate request
+                // Validar solicitud
                 if (request == null)
                 {
-                    return BadRequest(new ErrorResponse("BadRequest", "Request body is required", 400));
+                    return BadRequest(new ErrorResponse("BadRequest", "Se requiere el cuerpo de la solicitud", 400));
                 }
 
                 if (string.IsNullOrWhiteSpace(request.From) ||
@@ -38,29 +37,27 @@ namespace ExchangeRateOffers.Mock1.Controllers
                     request.Value <= 0)
                 {
                     return BadRequest(new ErrorResponse("BadRequest",
-                        "Invalid request. From, To currencies and Value > 0 are required", 400));
+                        "Solicitud inválida. Se requieren las monedas From, To y Value > 0", 400));
                 }
 
-                // Get exchange rate
-                var rate = _exchangeRateService.CalculateConvertedAmount(request.From.ToUpper(), request.To.ToUpper(),request.Value);
-
+                // Obtener tasa de cambio
+                var rate = _exchangeRateService.GetExchangeRate(request.From.ToUpper(), request.To.ToUpper());
                 var response = new ResponseDto(rate);
 
-                _logger.LogInformation("Successfully processed exchange rate: {From} to {To} = {Rate}",
+                _logger.LogInformation("Tasa de cambio procesada exitosamente: {From} a {To} = {Rate}",
                     request.From, request.To, rate);
 
                 return Ok(response);
             }
             catch (ArgumentException ex)
             {
-                _logger.LogWarning("Invalid currency pair: {Message}", ex.Message);
+                _logger.LogWarning("Par de monedas inválido: {Message}", ex.Message);
                 return NotFound(new ErrorResponse("NotFound", ex.Message, 404));
-
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Unexpected error processing exchange rate request");
-                return StatusCode(500, new ErrorResponse("InternalServerError", "An unexpected error occurred", 500));
+                _logger.LogError(ex, "Error inesperado procesando la solicitud de tasa de cambio");
+                return StatusCode(500, new ErrorResponse("InternalServerError", "Ocurrió un error inesperado", 500));
             }
         }
     }

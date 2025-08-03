@@ -6,7 +6,7 @@ using ExchangeRateOffers.Mock3.Dtos;
 namespace ExchangeRateOffers.Mock3.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/mock3")]
     public class ExchangeController : ControllerBase
     {
         private readonly IExchangeRateService _exchangeRateService;
@@ -22,37 +22,37 @@ namespace ExchangeRateOffers.Mock3.Controllers
         [HttpPost("convert")]
         [Consumes("application/json")]
         [Produces("application/json")]
-        public async Task<ActionResult<ExchangeResponse>> ConvertCurrency([FromBody] ExchangeRequest request)
+        public ActionResult<ExchangeResponse> ConvertCurrency([FromBody] ExchangeRequest request)
         {
             try
             {
-                // Get user from context (set by middleware)
                 var userId = HttpContext.Items["UserId"]?.ToString();
-                _logger.LogInformation("Processing advanced exchange rate request for user: {UserId}", userId);
+                _logger.LogInformation("Procesando solicitud de intercambio avanzado para el usuario: {UserId}", userId);
 
-                // Validate request
+                // Validar solicitud
                 if (request?.Exchange == null)
                 {
                     var errorResponse = new ErrorResponse(
                         StatusCode: 400,
-                        Message: "Request body with 'exchange' object is required"
+                        Message: "Se requiere el cuerpo de la solicitud con el objeto 'exchange'"
                     );
                     return BadRequest(errorResponse);
                 }
 
                 var exchange = request.Exchange;
+
                 if (string.IsNullOrWhiteSpace(exchange.SourceCurrency) ||
                     string.IsNullOrWhiteSpace(exchange.TargetCurrency) ||
                     exchange.Quantity <= 0)
                 {
                     var errorResponse = new ErrorResponse(
                         StatusCode: 400,
-                        Message: "Invalid exchange data. SourceCurrency, TargetCurrency and Quantity > 0 are required"
+                        Message: "Datos de intercambio inválidos. Se requieren SourceCurrency, TargetCurrency y Quantity > 0"
                     );
                     return BadRequest(errorResponse);
                 }
 
-                // Get converted total
+                // Obtener total convertido
                 var total = _exchangeRateService.GetConvertedTotal(
                     exchange.SourceCurrency.ToUpper(),
                     exchange.TargetCurrency.ToUpper(),
@@ -60,18 +60,18 @@ namespace ExchangeRateOffers.Mock3.Controllers
 
                 var response = new ExchangeResponse(
                     StatusCode: 200,
-                    Message: "Exchange completed successfully",
+                    Message: "Intercambio completado exitosamente",
                     Data: new ExchangeData(total)
                 );
 
-                _logger.LogInformation("Successfully processed exchange: {Quantity} {Source} to {Total} {Target}",
+                _logger.LogInformation("Intercambio procesado exitosamente: {Quantity} {Source} a {Total} {Target}",
                     exchange.Quantity, exchange.SourceCurrency, total, exchange.TargetCurrency);
 
                 return Ok(response);
             }
             catch (ArgumentException ex)
             {
-                _logger.LogWarning("Invalid currency pair: {Message}", ex.Message);
+                _logger.LogWarning("Par de monedas inválido: {Message}", ex.Message);
                 var errorResponse = new ErrorResponse(
                     StatusCode: 404,
                     Message: ex.Message
@@ -80,10 +80,10 @@ namespace ExchangeRateOffers.Mock3.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Unexpected error processing advanced exchange request");
+                _logger.LogError(ex, "Error inesperado procesando la solicitud de intercambio avanzado");
                 var errorResponse = new ErrorResponse(
                     StatusCode: 500,
-                    Message: "An unexpected error occurred"
+                    Message: "Ocurrió un error inesperado"
                 );
                 return StatusCode(500, errorResponse);
             }

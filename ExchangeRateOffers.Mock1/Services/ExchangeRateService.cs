@@ -32,15 +32,7 @@
             {
                 return rate;
             }
-            throw new ArgumentException($"Exchange rate not available for {fromCurrency} to {toCurrency}");
-        }
-
-        public decimal CalculateConvertedAmount(string fromCurrency, string toCurrency, decimal amount)
-        {
-            var rate = GetExchangeRate(fromCurrency, toCurrency);
-            var convertedAmount = amount * rate;
-
-            return Math.Round(convertedAmount, 2);
+            throw new ArgumentException($"Conversion no permitida: {fromCurrency} a {toCurrency}");
         }
     }
 }
