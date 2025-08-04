@@ -38,7 +38,7 @@ Una API robusta para obtener las mejores ofertas de cambio de divisa comparando 
 
 1. **Clonar el repositorio**
 ```bash
-git clone 
+git clone https://github.com/GeraldSilverio/ExchangeRateOffers.git
 cd ExchangeRateOffers
 ```
 
@@ -222,24 +222,15 @@ dotnet test --filter "ExchangeRateServiceTests"
 ### Estructura de Tests
 
 ```
-ExchangeRateOffers.Tests/
+ExchangeRateOffers.Testings/
 ├── Unit/
 │   ├── Controllers/
 │   ├── Services/
 │   └── Validators/
-├── Integration/
-└── Helpers/
 ```
 
 ### Cobertura de Tests
-
-- ✅ **ExchangeRateService**: 8 casos de prueba
-- ✅ **ExchangeRateController**: 9 casos de prueba  
-- ✅ **Validadores**: 12 casos de prueba
-- ✅ **WebServiceConsult**: 8 casos de prueba
-- ✅ **ApiConfiguration**: 12 casos de prueba
-- ✅ **Tests de Integración**: 8 casos de prueba
-
+![alt text](image.png)
 ## 🔧 Ejemplos de Uso
 
 ### cURL

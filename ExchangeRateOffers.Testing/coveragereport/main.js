@@ -243,6 +243,7 @@ var assemblies = [
     "name": "ExchangeRateOffers.Presentation.Api",
     "classes": [
       { "name": "ExchangeRateOffers.Presentation.Api.Controllers.ExchangeRateController", "rp": "ExchangeRateOffers.Presentation.Api_ExchangeRateController.html", "cl": 32, "ucl": 10, "cal": 42, "tl": 91, "cb": 4, "tb": 4, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Program", "rp": "ExchangeRateOffers.Presentation.Api_Program.html", "cl": 0, "ucl": 30, "cal": 30, "tl": 53, "cb": 0, "tb": 2, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
     ]},
 ];
 
