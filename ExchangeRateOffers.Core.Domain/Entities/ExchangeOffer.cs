@@ -4,12 +4,10 @@
     /// Representa una oferta de cambio de un proveedor de API específico
     /// </summary>
     public record ExchangeOffer(
-        string ProviderId,
         string ProviderName,
-        decimal ConvertedAmount,
-        decimal ExchangeRate,
+        double ConvertedAmount,
+        double ExchangeRate,
         bool IsSuccessful,
-        string? ErrorMessage = null,
-        TimeSpan ResponseTime = default
+        string? ErrorMessage = null
     );
 }

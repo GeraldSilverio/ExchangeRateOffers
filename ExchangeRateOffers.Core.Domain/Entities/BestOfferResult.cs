@@ -5,8 +5,6 @@
     /// </summary>
     public record BestOfferResult(
         ExchangeOffer BestOffer,
-        IReadOnlyList<ExchangeOffer> AllOffers,
-        ExchangeRequest OriginalRequest,
-        DateTime ProcessedAt
+        List<ExchangeOffer> AllOffers
     );
 }
