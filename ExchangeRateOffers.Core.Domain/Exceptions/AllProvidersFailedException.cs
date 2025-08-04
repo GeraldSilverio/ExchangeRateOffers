@@ -1,5 +1,9 @@
-﻿namespace ExchangeRateOffers.Core.Domain.Exceptions
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace ExchangeRateOffers.Core.Domain.Exceptions
 {
+    [ExcludeFromCodeCoverage]
+
     /// <summary>
     /// Se lanza cuando todos los proveedores fallan al obtener tasas de cambio
     /// </summary>

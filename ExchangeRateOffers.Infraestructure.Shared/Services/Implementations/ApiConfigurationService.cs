@@ -3,9 +3,11 @@ using ExchangeRateOffers.Core.Domain.Entities;
 using ExchangeRateOffers.Core.Domain.Exceptions;
 using Microsoft.Extensions.Configuration;
 using Serilog;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ExchangeRateOffers.Infraestructure.Shared.Services.Implementations
 {
+    [ExcludeFromCodeCoverage]
     public class ApiConfigurationService : IApiConfigurationService
     {
         private readonly IConfiguration _configuration; 

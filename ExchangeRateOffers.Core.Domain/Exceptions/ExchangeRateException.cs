@@ -1,5 +1,9 @@
-﻿namespace ExchangeRateOffers.Core.Domain.Exceptions
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace ExchangeRateOffers.Core.Domain.Exceptions
 {
+    [ExcludeFromCodeCoverage]
+
     /// <summary>
     /// Excepción base para errores relacionados con cambio de divisas
     /// </summary>

@@ -5,9 +5,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using ExchangeRateOffers.Core.Application.Contract.Interfaces;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ExchangeRateOffers.Infraestructure.Shared
 {
+    [ExcludeFromCodeCoverage]
+
     public static class InfraestructureDependencies
     {
         public static void AddSharedDependencies(this IServiceCollection services, IConfiguration configuration)

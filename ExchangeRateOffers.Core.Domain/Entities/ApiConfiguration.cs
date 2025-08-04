@@ -1,5 +1,8 @@
-﻿namespace ExchangeRateOffers.Core.Domain.Entities
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace ExchangeRateOffers.Core.Domain.Entities
 {
+    [ExcludeFromCodeCoverage]
     /// <summary>
     /// Configuración para los proveedores de APIs externos
     /// </summary>

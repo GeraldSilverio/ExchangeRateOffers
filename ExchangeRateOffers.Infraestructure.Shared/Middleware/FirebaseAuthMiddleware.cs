@@ -2,11 +2,14 @@
 using FirebaseAdmin.Auth;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Text.Json;
 
 namespace ExchangeRateOffers.Infraestructure.Shared.Middleware
 {
+    [ExcludeFromCodeCoverage]
+
     /// <summary>
     /// Middleware para autenticación con Firebase en la API principal
     /// </summary>

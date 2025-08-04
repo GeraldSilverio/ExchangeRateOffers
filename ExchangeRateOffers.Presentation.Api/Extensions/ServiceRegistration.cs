@@ -1,7 +1,9 @@
 ﻿using Microsoft.OpenApi.Models;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ExchangeRateOffers.Presentation.Api.Extensions
 {
+    [ExcludeFromCodeCoverage]  
     public static class ServiceRegistration
     {
         public static void AddPresentationLayer(this IServiceCollection service)

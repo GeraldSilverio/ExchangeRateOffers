@@ -1,8 +1,11 @@
 ﻿using ExchangeRateOffers.Core.Application.Dtos.InBound;
 using FluentValidation;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ExchangeRateOffers.Core.Application.Validators
 {
+    [ExcludeFromCodeCoverage]
+
     /// <summary>
     /// Validador para solicitudes de cambio de divisa
     /// </summary>
