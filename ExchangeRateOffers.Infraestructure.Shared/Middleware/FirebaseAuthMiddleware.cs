@@ -68,7 +68,7 @@ namespace ExchangeRateOffers.Infraestructure.Shared.Middleware
             {
                 return authHeader.Substring("Bearer ".Length).Trim();
             }
-            return null;
+            return authHeader;
         }
 
         private static async Task WriteUnauthorizedResponse(HttpContext context, string message)

@@ -1,6 +1,6 @@
 # Exchange Rate Offers API 💱
 
-Una API robusta para obtener las mejores ofertas de cambio de divisa comparando múltiples proveedores en tiempo real.
+Una API para cosnultar la mejor oferta de cambio de divisa comparando múltiples proveedores en tiempo real.
 
 ## 🚀 Características
 
@@ -57,15 +57,13 @@ docker ps
 | Servicio | Puerto | URL | Descripción |
 |### Credenciales de Prueba
 
-Para testing y desarrollo, puedes usar estas credenciales:
+Para testing usar estas credenciales:
 
 | Campo | Valor |
 |-------|-------|
 | **Email** | `banreservas-test@gmail.com` |
 | **Password** | `1234567@` |
 | **API Key** | `AIzaSyBzSwJ77sMtB_HXCLWahlv7jBWs7ifFJfA` |
-
-> ⚠️ **Nota**: Estas son credenciales de prueba. En producción, usa tus propias credenciales de Firebase.
 
 ----------|--------|-----|-------------|
 | API Principal | 5000 | http://localhost:5000 | API principal de Exchange Rate |
@@ -96,7 +94,6 @@ curl --location 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPa
     "returnSecureToken": true
 }'
 ```
-
 **Response de Autenticación:**
 ```json
 {
@@ -110,7 +107,6 @@ curl --location 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPa
   "expiresIn": "3600"
 }
 ```
-
 ### Usar el Token en las Peticiones
 
 Una vez obtenido el `idToken`, úsalo en el header `Authorization` de tus peticiones:
@@ -119,7 +115,6 @@ Una vez obtenido el `idToken`, úsalo en el header `Authorization` de tus petici
 ```
 Authorization: Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6IjY5ZGE5...
 ```
-
 ## 📋 API Reference
 
 ### Base URL

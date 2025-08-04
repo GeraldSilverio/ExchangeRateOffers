@@ -59,7 +59,7 @@ namespace ExchangeRateOffers.Core.Application.Contract.Services
 
                 var bestOffer = successfulOffers.OrderByDescending(x => x.ConvertedAmount).First();
 
-                var result = new BestOfferResult(bestOffer, offers.ToList());
+                var result = new BestOfferResult(bestOffer, successfulOffers.ToList());
 
                 Log.Information($"Mejor oferta obtenida de {bestOffer.ProviderName} - Rate: {bestOffer.ExchangeRate}, APIs exitosas: {successfulOffers.Count}/3");
 
