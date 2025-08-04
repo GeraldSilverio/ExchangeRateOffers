@@ -16,19 +16,12 @@
 						"exec": [
 							"// Script para el Tab \"Tests\" en Postman\r",
 							"pm.test(\"Extraer y guardar token\", function () {\r",
-							"    // Verificar que la respuesta sea exitosa\r",
 							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
 							"    \r",
-							"    // Parsear la respuesta JSON\r",
 							"    var jsonData = pm.response.json();\r",
 							"    \r",
-							"    // Extraer el idToken de la respuesta\r",
 							"    if (jsonData && jsonData.idToken) {\r",
-							"        // Guardar el token en una variable de colección (persiste entre requests)\r",
 							"        pm.collectionVariables.set(\"authToken\", jsonData.idToken);\r",
-							"        \r",
-							"        // También lo guardamos en variable de entorno si prefieres\r",
-							"        // pm.environment.set(\"authToken\", jsonData.idToken);\r",
 							"        \r",
 							"        console.log(\"Token guardado exitosamente:\", jsonData.idToken.substring(0, 50) + \"...\");\r",
 							"        \r",
@@ -96,252 +89,6 @@
 			"response": []
 		},
 		{
-			"name": "API MOCK1",
-			"event": [
-				{
-					"listen": "prerequest",
-					"script": {
-						"exec": [
-							"const options = {\r",
-							"    url: 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBzSwJ77sMtB_HXCLWahlv7jBWs7ifFJfA',\r",
-							"    method: 'POST',\r",
-							"    header: {\r",
-							"        'Content-Type': 'application/json'\r",
-							"    },\r",
-							"    body: {\r",
-							"        mode: 'raw',\r",
-							"        raw: JSON.stringify({\r",
-							"            \"email\": \"banreservas-test@gmail.com\",\r",
-							"            \"password\": \"1234567@\",\r",
-							"            \"returnSecureToken\": true\r",
-							"        })\r",
-							"    }\r",
-							"};\r",
-							"\r",
-							"pm.sendRequest(options, function (err, res) {\r",
-							"    if (err) {\r",
-							"        console.log('Error getting Firebase token:', err);\r",
-							"    } else {\r",
-							"        const responseJson = res.json();\r",
-							"        if (responseJson.idToken) {\r",
-							"            pm.environment.set(\"firebase_token\", responseJson.idToken);\r",
-							"            console.log('Firebase token obtained successfully');\r",
-							"        } else {\r",
-							"            console.log('Error: No idToken in response', responseJson);\r",
-							"        }\r",
-							"    }\r",
-							"});"
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				},
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							""
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{authToken}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [
-					{
-						"key": "accept",
-						"value": "text/plain"
-					},
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n  \"from\": \"USD\",\r\n  \"to\": \"DOP\",\r\n  \"value\": 1\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:5001/api/mock1/get-rate",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "5001",
-					"path": [
-						"api",
-						"mock1",
-						"get-rate"
-					]
-				},
-				"description": "Generated from cURL: curl -X 'POST' \\\r\n  'https://localhost:7271/api/ExchangeRate/convert' \\\r\n  -H 'accept: text/plain' \\\r\n  -H 'Content-Type: application/json' \\\r\n  -d '{\r\n  \"from\": \"USD\",\r\n  \"to\": \"EUR\",\r\n  \"value\": 100\r\n}'"
-			},
-			"response": []
-		},
-		{
-			"name": "API MOCK2",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"// Script para el Tab \"Tests\" en Postman\r",
-							"pm.test(\"Extraer y guardar token\", function () {\r",
-							"    // Verificar que la respuesta sea exitosa\r",
-							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
-							"    \r",
-							"    // Parsear la respuesta JSON\r",
-							"    var jsonData = pm.response.json();\r",
-							"    \r",
-							"    // Extraer el idToken de la respuesta\r",
-							"    if (jsonData && jsonData.idToken) {\r",
-							"        // Guardar el token en una variable de colección (persiste entre requests)\r",
-							"        pm.collectionVariables.set(\"authToken\", jsonData.idToken);\r",
-							"        \r",
-							"        // También lo guardamos en variable de entorno si prefieres\r",
-							"        // pm.environment.set(\"authToken\", jsonData.idToken);\r",
-							"        \r",
-							"        console.log(\"Token guardado exitosamente:\", jsonData.idToken.substring(0, 50) + \"...\");\r",
-							"        \r",
-							"        // Opcional: también extraer otros datos útiles\r",
-							"        if (jsonData.email) {\r",
-							"            pm.collectionVariables.set(\"userEmail\", jsonData.email);\r",
-							"        }\r",
-							"        \r",
-							"        if (jsonData.localId) {\r",
-							"            pm.collectionVariables.set(\"userId\", jsonData.localId);\r",
-							"        }\r",
-							"        \r",
-							"        if (jsonData.refreshToken) {\r",
-							"            pm.collectionVariables.set(\"refreshToken\", jsonData.refreshToken);\r",
-							"        }\r",
-							"        \r",
-							"    } else {\r",
-							"        console.log(\"No se encontró idToken en la respuesta\");\r",
-							"    }\r",
-							"});"
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6Ijk1MWRkZTkzMmViYWNkODhhZmIwMDM3YmZlZDhmNjJiMDdmMDg2NmIiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vYmFucmVzZXJ2YXN0ZXN0LWNmOTczIiwiYXVkIjoiYmFucmVzZXJ2YXN0ZXN0LWNmOTczIiwiYXV0aF90aW1lIjoxNzU0MjM2OTcwLCJ1c2VyX2lkIjoidkdHcGJ6NDFHYU1JaFpGNXZaTzFqNm5BR3RNMiIsInN1YiI6InZHR3BiejQxR2FNSWhaRjV2Wk8xajZuQUd0TTIiLCJpYXQiOjE3NTQyMzY5NzAsImV4cCI6MTc1NDI0MDU3MCwiZW1haWwiOiJiYW5yZXNlcnZhcy10ZXN0QGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJlbWFpbCI6WyJiYW5yZXNlcnZhcy10ZXN0QGdtYWlsLmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.ALohFPAhqbNTTAGdyudH3gB6LTNtm-HbgDuBCdgcwayEPb0Gz-wuTrLzRDHH4g5A408wWbScFxLI_xEftg7UPBTDowTnT9_3WHGSUqleR18xYex9yYkEnOYW51aDX4EwMyqIrw_bEwEDspJmyueUP-vLuRmxttyBneRvkVViw8EKEXMcHX-ewE9iPHqi5n4sljqog8_76AphB0-ycLNS3fKIZ0pSGWFuXy4-05gX3gOvkvm2BUV50zxGDFCxSk789voDgtR-Ts1MOvWFrroUwcfPEadMrbwtsijGE7wYhVidqRFGpKFOO_kruvoV8fu8ntHc5Eigta9rHRzdcIfqUg",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/xml"
-					},
-					{
-						"key": "Authorization",
-						"value": "Bearer test-token"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "<Exchange>\r\n    <From>USD</From>\r\n    <To>EUR</To>\r\n    <Amount>100</Amount>\r\n</Exchange>",
-					"options": {
-						"raw": {
-							"language": "xml"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:5002/api/exchange/convert",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "5002",
-					"path": [
-						"api",
-						"exchange",
-						"convert"
-					]
-				},
-				"description": "Generated from cURL: curl -X POST http://localhost:5002/api/exchange/convert \\\n  -H \"Content-Type: application/xml\" \\\n  -H \"Authorization: Bearer test-token\" \\\n  -d '<Exchange><From>USD</From><To>EUR</To><Amount>100</Amount></Exchange>'"
-			},
-			"response": []
-		},
-		{
-			"name": "API MOCK3",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{authToken}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [
-					{
-						"key": "accept",
-						"value": "application/json"
-					},
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n  \"exchange\": {\r\n    \"sourceCurrency\": \"USD\",\r\n    \"targetCurrency\": \"DOP\",\r\n    \"quantity\": 100\r\n  }\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:5003/api/mock3/convert",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "5003",
-					"path": [
-						"api",
-						"mock3",
-						"convert"
-					]
-				},
-				"description": "Generated from cURL: curl -X 'POST' \\\r\n  'https://localhost:7058/api/Exchange/convert' \\\r\n  -H 'accept: application/json' \\\r\n  -H 'Content-Type: application/json' \\\r\n  -d '{\r\n  \"exchange\": {\r\n    \"sourceCurrency\": \"string\",\r\n    \"targetCurrency\": \"string\",\r\n    \"quantity\": 0\r\n  }\r\n}'"
-			},
-			"response": []
-		},
-		{
 			"name": "BEST-OFFER",
 			"request": {
 				"auth": {
@@ -371,7 +118,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"sourceCurrency\": \"USD\",\r\n  \"targetCurrency\": \"DOP\",\r\n  \"amount\": 100\r\n}",
+					"raw": "{\r\n  \"sourceCurrency\": \"USD\",\r\n  \"targetCurrency\": \"DOP\",\r\n  \"amount\": 100000\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -444,6 +191,11 @@
 		{
 			"key": "userId",
 			"value": ""
+		},
+		{
+			"key": "refreshToken",
+			"value": "",
+			"disabled": true
 		},
 		{
 			"key": "refreshToken",
