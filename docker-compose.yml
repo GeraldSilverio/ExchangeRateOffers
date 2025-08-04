@@ -1,37 +1,72 @@
 # docker-compose.yml
+version: '3.8'
+
 services:
+  # Servicio principal - API de Exchange Rate Offers
+  exchangerate-api:
+    build:
+      context: .
+      dockerfile: ExchangeRateOffers.Presentation.Api/Dockerfile
+    container_name: exchangerate-api
+    ports:
+      - "5000:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - ASPNETCORE_HTTP_PORTS=8080
+    depends_on:
+      - exchangerate-mock1
+      - exchangerate-mock2
+      - exchangerate-mock3
+    networks:
+      - exchangerate-network
+
+  # Mock Provider 1
   exchangerate-mock1:
     build:
       context: .
       dockerfile: ExchangeRateOffers.Mock1/Dockerfile
     container_name: exchangerate-mock1
     ports:
-      - "5001:8080"
+      - "5002:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:8080
       - ASPNETCORE_HTTP_PORTS=8080
+    networks:
+      - exchangerate-network
 
+  # Mock Provider 2
   exchangerate-mock2:
     build:
       context: .
       dockerfile: ExchangeRateOffers.Mock2/Dockerfile
     container_name: exchangerate-mock2
     ports:
-      - "5002:8080"
+      - "5003:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:8080
       - ASPNETCORE_HTTP_PORTS=8080
+    networks:
+      - exchangerate-network
 
+  # Mock Provider 3
   exchangerate-mock3:
     build:
       context: .
       dockerfile: ExchangeRateOffers.Mock3/Dockerfile
     container_name: exchangerate-mock3
     ports:
-      - "5003:8080"
+      - "5004:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:8080
       - ASPNETCORE_HTTP_PORTS=8080
+    networks:
+      - exchangerate-network
+
+# Red personalizada para comunicación entre servicios
+networks:
+  exchangerate-network:
+    driver: bridge
